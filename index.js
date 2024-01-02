@@ -1,12 +1,9 @@
-import express, { json } from 'express';
-import { connect, Schema, model } from 'mongoose';
+import express from "express";
+import cors from 'cors'
+import { Schema, model, mongoose } from 'mongoose';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Підключення до бази даних MongoDB
-connect('mongodb+srv://test:test@cluster0.gyra89u.mongodb.net/', {   
-});
+const PORT = 3000;
 
 
 // Схема та модель для Todo
@@ -18,7 +15,9 @@ const todoSchema = new Schema({
 
 const Todo = model('Todo', todoSchema);
 
-app.use(json());
+//middleware
+app.use(cors()); //для того щоб можно було відправляти з різних ip, запроси до нашого серверу
+app.use(express.json()); //для  того щоб express розумів що дані з фронту будуть приходити у форматі json
 
 // Роути
 
@@ -49,7 +48,15 @@ app.post('/api/todos', async (req, res) => {
     }
 });
 
-// Запуск сервера
-app.listen(PORT, () => {
-    console.log(`Сервер запущено на порті ${PORT}`);
-});
+async function start() {
+    try {
+        await mongoose.connect(
+            'mongodb+srv://test:test@cluster0.gyra89u.mongodb.net/'
+        );
+ 
+       app.listen(PORT, () => console.log(`server started on port: ${PORT}`));
+    } catch(error) {
+       console.log(error);
+    }
+}
+start();

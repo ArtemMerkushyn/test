@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 connect('mongodb+srv://test:test@cluster0.gyra89u.mongodb.net/', {   
 });
 
+
 // Схема та модель для Todo
 const todoSchema = new Schema({
     title: String,
